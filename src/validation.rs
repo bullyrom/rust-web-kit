@@ -56,8 +56,8 @@ mod tests {
 
     #[test]
     fn rejects_invalid_and_non_http_urls() {
-        let error = validate_http_url("ftp://example.com/file")
-            .expect_err("unsupported scheme must fail");
+        let error =
+            validate_http_url("ftp://example.com/file").expect_err("unsupported scheme must fail");
 
         assert_eq!(error.status_code, 400);
         assert_eq!(error.fields[0].field, "url");

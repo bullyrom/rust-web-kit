@@ -63,15 +63,13 @@ mod tests {
 
     impl ActiveModelBehavior for ActiveModel {}
 
-    const SORT_MAPPING: [(&str, Column); 2] = [
-        ("created_at", Column::CreatedAt),
-        ("title", Column::Title),
-    ];
+    const SORT_MAPPING: [(&str, Column); 2] =
+        [("created_at", Column::CreatedAt), ("title", Column::Title)];
 
     #[test]
     fn resolves_a_known_sort_field() {
-        let column =
-            resolve_sort_column(Some("title"), &SORT_MAPPING).expect("known sort field must resolve");
+        let column = resolve_sort_column(Some("title"), &SORT_MAPPING)
+            .expect("known sort field must resolve");
 
         assert!(matches!(column, Some(Column::Title)));
     }

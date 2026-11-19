@@ -14,11 +14,8 @@ pub fn json_config() -> web::JsonConfig {
 pub fn query_config() -> web::QueryConfig {
     web::QueryConfig::default().error_handler(|error, _request| {
         let reason = error.to_string();
-        let response = ErrorResponse::bad_request(
-            "invalid_query",
-            "Query parameters are invalid",
-            reason,
-        );
+        let response =
+            ErrorResponse::bad_request("invalid_query", "Query parameters are invalid", reason);
         actix_web::error::InternalError::from_response(error, response.error_response()).into()
     })
 }

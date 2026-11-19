@@ -26,9 +26,7 @@ where
     let model = T::find_by_id(id)
         .one(db)
         .await
-        .map_err(|error| {
-            ErrorResponse::internal(format!("database error in get_by_id: {error}"))
-        })?
+        .map_err(|error| ErrorResponse::internal(format!("database error in get_by_id: {error}")))?
         .ok_or_else(|| ErrorResponse::not_found(resource, id))?;
 
     let dto = mapper(&model);

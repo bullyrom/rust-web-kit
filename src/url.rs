@@ -4,14 +4,7 @@ use crate::error::{ErrorResponse, FieldError};
 
 const TRACKING_PARAM_PREFIXES: [&str; 3] = ["utm_", "pk_", "mc_"];
 const TRACKING_PARAMS: [&str; 8] = [
-    "fbclid",
-    "gclid",
-    "yclid",
-    "msclkid",
-    "igshid",
-    "mc_cid",
-    "mc_eid",
-    "_ga",
+    "fbclid", "gclid", "yclid", "msclkid", "igshid", "mc_cid", "mc_eid", "_ga",
 ];
 const SUPPORTED_SCHEMES: [&str; 2] = ["http", "https"];
 const HTTP_DEFAULT_PORT: u16 = 80;

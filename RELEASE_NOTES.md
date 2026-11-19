@@ -6,3 +6,4 @@
 - Add Actix JSON/query/path error handler configuration
 - Add README with usage examples and crate tests
 - Fix `ListParams` numeric query parameters when nested with `serde(flatten)`
+- Format the crate with rustfmt

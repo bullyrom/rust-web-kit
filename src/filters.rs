@@ -157,11 +157,7 @@ mod tests {
 
     #[test]
     fn search_condition_is_applied_to_each_filtered_field() {
-        let query = add_search_condition(
-            Entity::find(),
-            "Smoke",
-            &[Column::Title, Column::Url],
-        );
+        let query = add_search_condition(Entity::find(), "Smoke", &[Column::Title, Column::Url]);
         let statement = query.build(DbBackend::Postgres);
 
         assert!(statement.sql.contains("LIKE"));
