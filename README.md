@@ -16,7 +16,7 @@ application-specific endpoints.
 
 ```toml
 [dependencies]
-rust-web-kit = { git = "https://gitea.djue.ru/87anch/rust-web-kit.git", rev = "<commit-sha>" }
+rust-web-kit = { git = "https://<git-host>/<org>/rust-web-kit.git", rev = "<commit-sha>" }
 ```
 
 `rev` should be a full commit SHA. The crate uses the same versions as the
@@ -117,7 +117,7 @@ query = add_optional_search_condition(
 
 query = apply_filters(
     query,
-    vec![(book::Column::Published, FilterValue::Bool(true))],
+    vec![(book::Column::Available, FilterValue::Bool(true))],
 );
 
 query = apply_date_range(
