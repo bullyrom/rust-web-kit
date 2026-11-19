@@ -5,3 +5,4 @@
 - Add get-by-id, text, URL and validation helpers
 - Add Actix JSON/query/path error handler configuration
 - Add README with usage examples and crate tests
+- Fix `ListParams` numeric query parameters when nested with `serde(flatten)`

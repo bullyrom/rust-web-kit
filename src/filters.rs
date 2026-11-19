@@ -1,8 +1,35 @@
 use sea_orm::{entity::prelude::*, Condition, EntityTrait, QueryFilter};
-use serde::Deserialize;
+use serde::{Deserialize, Deserializer};
 use utoipa::{IntoParams, ToSchema};
 
 use crate::sorting::SortDirection;
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(untagged)]
+enum NumberOrText {
+    Number(u64),
+    Text(String),
+}
+
+fn deserialize_optional_u64<'de, D>(deserializer: D) -> Result<Option<u64>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    match Option::<NumberOrText>::deserialize(deserializer)? {
+        None => Ok(None),
+        Some(NumberOrText::Number(value)) => Ok(Some(value)),
+        Some(NumberOrText::Text(value)) => {
+            let value = value.trim();
+            if value.is_empty() {
+                return Ok(None);
+            }
+            value
+                .parse::<u64>()
+                .map(Some)
+                .map_err(serde::de::Error::custom)
+        }
+    }
+}
 
 #[derive(Debug, Clone, Deserialize, IntoParams, ToSchema)]
 pub struct ListParams {
@@ -16,11 +43,11 @@ pub struct ListParams {
     #[serde(default)]
     pub order: SortDirection,
     /// Page number (1-based).
-    #[serde(default)]
+    #[serde(default, deserialize_with = "deserialize_optional_u64")]
     #[param(example = 1)]
     pub page: Option<u64>,
     /// Number of items per page.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "deserialize_optional_u64")]
     #[param(example = 30)]
     pub page_size: Option<u64>,
 }
@@ -200,6 +227,26 @@ mod tests {
         assert_eq!(query.order, SortDirection::Asc);
         assert_eq!(query.page, Some(2));
         assert_eq!(query.page_size, Some(10));
+    }
+
+    #[derive(Debug, Deserialize)]
+    struct FlattenedListParams {
+        #[serde(flatten)]
+        list: ListParams,
+    }
+
+    #[test]
+    fn list_params_extracts_numbers_from_a_flattened_query_string() {
+        let query = web::Query::<FlattenedListParams>::from_query(
+            "search=book&sort=title&order=asc&page=1&page_size=1",
+        )
+        .expect("flattened query must parse");
+
+        assert_eq!(query.list.search.as_deref(), Some("book"));
+        assert_eq!(query.list.sort.as_deref(), Some("title"));
+        assert_eq!(query.list.order, SortDirection::Asc);
+        assert_eq!(query.list.page, Some(1));
+        assert_eq!(query.list.page_size, Some(1));
     }
 
     #[test]
