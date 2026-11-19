@@ -1,0 +1,7 @@
+- Add unified `ErrorResponse` envelope with 4xx/5xx builders and field errors
+- Add Django REST Framework-compatible pagination
+- Add reusable list query params, filters, date ranges and search helpers
+- Add allow-listed sorting helpers and sort direction type
+- Add get-by-id, text, URL and validation helpers
+- Add Actix JSON/query/path error handler configuration
+- Add README with usage examples and crate tests
